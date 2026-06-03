@@ -55,22 +55,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async authorized({ auth: session, request }) {
-      const { pathname } = request.nextUrl;
-
-      if (pathname.startsWith("/admin")) {
-        return session?.user?.email === process.env.ADMIN_EMAIL;
-      }
-
-      if (
-        pathname.startsWith("/dashboard") ||
-        pathname.startsWith("/list-property") ||
-        pathname.startsWith("/payment")
-      ) {
-        return !!session?.user;
-      }
-
-      return true;
-    },
   },
 });
