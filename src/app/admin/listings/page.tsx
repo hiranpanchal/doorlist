@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { Home } from "lucide-react";
 import AdminActions from "@/components/AdminActions";

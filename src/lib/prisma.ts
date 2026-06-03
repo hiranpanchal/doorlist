@@ -1,19 +1,23 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 function buildPrismaClient() {
-  if (process.env.TURSO_DATABASE_URL) {
+  if (process.env.TURSO_DATABASE_URL && process.env.TURSO_AUTH_TOKEN) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PrismaLibSql } = require("@prisma/adapter-libsql");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createClient } = require("@libsql/client");
+
     const libsql = createClient({
       url: process.env.TURSO_DATABASE_URL,
       authToken: process.env.TURSO_AUTH_TOKEN,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const adapter = new PrismaLibSql(libsql as any);
+    const adapter = new PrismaLibSql(libsql);
     return new PrismaClient({ adapter } as never);
   }
+
+  // Local SQLite fallback
   return new PrismaClient();
 }
 
