@@ -1,26 +1,63 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: #0e3a5c;
+  --color-primary-light: #0e4f82;
+  --color-primary-dark: #0a3c63;
+  --color-accent: #3b7dd8;
+  --color-accent-light: #4a8be0;
+  --color-accent-dark: #2d6ab5;
+  --color-success: #1f8a5b;
+  --color-muted: #5b7186;
+  --color-surface: #f6f8fb;
+  --color-surface-2: #eef2f8;
+  --color-border: #e3e9f1;
+  --color-border-2: #cdd8e6;
+  --color-ink: #0e3a5c;
+  --color-ink-2: #1d4d72;
+  --font-sans: var(--font-hanken);
+  --font-display: var(--font-bricolage);
+  --font-mono: var(--font-hanken);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #0e3a5c;
+  background: #f6f8fb;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'ss01', 'cv01';
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+
+.hero-gradient {
+  background: linear-gradient(165deg, #06182b 0%, #0a2844 40%, #0e3558 100%);
+}
+
+.card-hover {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -24px rgba(10, 40, 70, 0.4);
+}
+
+/* Eyebrow / mono labels */
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+/* Selection highlight */
+::selection {
+  background: #3b7dd8;
+  color: #fff;
 }

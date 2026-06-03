@@ -1,0 +1,108 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  phone        String     @default("")
+  passwordHash String
+  role         String     @default("landlord")
+  bio          String     @default("")
+  company      String     @default("")
+  logo         String     @default("")
+  website      String     @default("")
+  city         String     @default("")
+  county       String     @default("")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  properties   Property[]
+  payments     Payment[]
+  messages     Message[]
+}
+
+model Message {
+  id           String   @id @default(cuid())
+  propertyId   String
+  landlordId   String
+  senderName   String
+  senderEmail  String
+  senderPhone  String   @default("")
+  body         String
+  read         Boolean  @default(false)
+  archived     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  property     Property @relation(fields: [propertyId], references: [id])
+  landlord     User     @relation(fields: [landlordId], references: [id])
+}
+
+model Property {
+  id               String    @id @default(cuid())
+  title            String
+  description      String
+  propertyType     String
+  address          String
+  city             String
+  county           String
+  postcode         String
+  price            Int
+  bedrooms         Int
+  bathrooms        Int
+  furnished        String    @default("unfurnished")
+  petFriendly      Boolean   @default(false)
+  dssAccepted      Boolean   @default(false)
+  parking          Boolean   @default(false)
+  garden           Boolean   @default(false)
+  fireplace        Boolean   @default(false)
+  studentFriendly  Boolean   @default(false)
+  familiesAllowed  Boolean   @default(true)
+  smokersAllowed   Boolean   @default(false)
+  billsIncluded    Boolean   @default(false)
+  deposit          Int       @default(0)
+  minTenancy       Int       @default(6)
+  epc              String    @default("C")
+  availableFrom    String
+  images           String
+  landlordName     String
+  landlordEmail    String
+  landlordPhone    String
+  featured         Boolean   @default(false)
+  status           String    @default("draft")
+  views            Int       @default(0)
+  paidAt           DateTime?
+  expiresAt        DateTime?
+  userId           String?
+  user             User?     @relation(fields: [userId], references: [id])
+  payments         Payment[]
+  messages         Message[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Setting {
+  id    String @id @default("singleton")
+  key   String @unique
+  value String
+}
+
+model Payment {
+  id              String    @id @default(cuid())
+  userId          String
+  propertyId      String
+  amount          Int       @default(2999)
+  currency        String    @default("gbp")
+  status          String    @default("pending")
+  stripeSessionId String?
+  paidAt          DateTime?
+  expiresAt       DateTime?
+  createdAt       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [id])
+  property        Property  @relation(fields: [propertyId], references: [id])
+}
