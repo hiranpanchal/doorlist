@@ -91,6 +91,21 @@ model Setting {
   value String
 }
 
+model Page {
+  id             String   @id
+  title          String
+  slug           String   @unique
+  heroTitle      String   @default("")
+  heroSubtitle   String   @default("")
+  heroImage      String   @default("")
+  body           String   @default("")
+  contactForm    Boolean  @default(false)
+  contactFields  String   @default("")
+  contactEmail   String   @default("")
+  published      Boolean  @default(true)
+  updatedAt      DateTime @updatedAt
+}
+
 model Payment {
   id              String    @id @default(cuid())
   userId          String
