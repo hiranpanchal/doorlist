@@ -180,6 +180,56 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Renters' Rights Act Banner */}
+      <section className="py-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            className="rounded-3xl overflow-hidden"
+            style={{ background: "linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 50%, #c3e6ec 100%)" }}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+              <div className="p-10 lg:p-14 flex flex-col justify-center">
+                <div
+                  className="inline-flex items-center gap-2 mb-5 px-3 py-1 bg-ink/10 rounded-full text-xs font-semibold w-fit"
+                  style={{ color: "var(--color-ink)" }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-red-500" />
+                  Important Update
+                </div>
+                <h2
+                  className="text-2xl sm:text-3xl font-bold text-ink mb-4"
+                  style={{
+                    fontFamily: "var(--font-bricolage), sans-serif",
+                    letterSpacing: "-0.025em",
+                    lineHeight: 1.15,
+                  }}
+                >
+                  Renters&apos; Rights Act now in force: here&apos;s what you need to know
+                </h2>
+                <p className="text-sm text-ink/70 leading-relaxed mb-6 max-w-lg">
+                  The biggest change to rental law in 40 years came into force on 1 May 2026. No fault evictions
+                  are gone, rent increases are capped, and tenants can now keep pets. Whether you&apos;re a landlord
+                  or tenant — this affects you.
+                </p>
+                <Link
+                  href="/renters-rights-act"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 text-sm font-semibold transition-colors w-fit hover:bg-ink hover:text-white"
+                  style={{ borderColor: "var(--color-ink)", color: "var(--color-ink)" }}
+                >
+                  Read the full guide <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div
+                className="hidden lg:block min-h-[320px] bg-cover bg-center"
+                style={{
+                  backgroundImage: "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80')",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Reviews — Trustpilot Style */}
       <section className="py-20 lg:py-28 bg-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
