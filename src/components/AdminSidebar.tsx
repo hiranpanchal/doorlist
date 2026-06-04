@@ -3,13 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Home, Users, CreditCard, Settings, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Home, Users, CreditCard, Settings, LogOut, Shield, FileText } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 const navItems = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { href: "/admin/listings", label: "Listings", icon: Home, exact: false },
   { href: "/admin/customers", label: "Customers", icon: Users, exact: false },
+  { href: "/admin/content", label: "Content", icon: FileText, exact: false },
   { href: "/admin/payments", label: "Payments", icon: CreditCard, exact: false },
   { href: "/admin/settings", label: "Settings", icon: Settings, exact: false },
 ];
