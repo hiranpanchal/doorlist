@@ -6,20 +6,26 @@ import { SlidersHorizontal, List, Map } from "lucide-react";
 export default function SearchFiltersToggle({
   query,
   showFilters,
+  view,
 }: {
   query: string;
   showFilters: boolean;
+  view: string;
 }) {
   const router = useRouter();
 
-  function toggleFilters() {
+  function setParam(key: string, value: string | null) {
     const params = new URLSearchParams(window.location.search);
-    if (showFilters) {
-      params.delete("filters");
+    if (value) {
+      params.set(key, value);
     } else {
-      params.set("filters", "true");
+      params.delete(key);
     }
     router.push(`/properties?${params.toString()}`);
+  }
+
+  function toggleFilters() {
+    setParam("filters", showFilters ? null : "true");
   }
 
   const btnBase =
@@ -37,11 +43,17 @@ export default function SearchFiltersToggle({
         <SlidersHorizontal className="w-4 h-4" />
         Filters
       </button>
-      <button className={`${btnBase} ${btnActive}`}>
+      <button
+        onClick={() => setParam("view", null)}
+        className={`${btnBase} ${view !== "map" ? btnActive : btnInactive}`}
+      >
         <List className="w-4 h-4" />
         List
       </button>
-      <button className={`${btnBase} ${btnInactive}`}>
+      <button
+        onClick={() => setParam("view", "map")}
+        className={`${btnBase} ${view === "map" ? btnActive : btnInactive}`}
+      >
         <Map className="w-4 h-4" />
         Map
       </button>

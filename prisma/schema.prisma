@@ -75,6 +75,8 @@ model Property {
   featured         Boolean   @default(false)
   status           String    @default("draft")
   views            Int       @default(0)
+  latitude         Float?
+  longitude        Float?
   paidAt           DateTime?
   expiresAt        DateTime?
   userId           String?

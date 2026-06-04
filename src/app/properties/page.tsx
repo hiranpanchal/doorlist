@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import PropertyRowCard from "@/components/PropertyRowCard";
+import PropertyMap from "@/components/PropertyMap";
 import SearchBar from "@/components/SearchBar";
 import SearchFiltersToggle from "@/components/SearchFiltersToggle";
 import PropertyFilters from "@/components/PropertyFilters";
 import { Prisma } from "@prisma/client";
-import { SlidersHorizontal, List, Map, Mail, ArrowRight } from "lucide-react";
 
 export default async function PropertiesPage({
   searchParams,
@@ -25,6 +25,7 @@ export default async function PropertiesPage({
   const garden = params.garden === "true";
   const sort = typeof params.sort === "string" ? params.sort : "newest";
   const showFilters = params.filters === "true";
+  const view = typeof params.view === "string" ? params.view : "list";
 
   const where: Prisma.PropertyWhereInput = {
     status: { in: ["available", "active"] },
@@ -84,7 +85,7 @@ export default async function PropertiesPage({
             <div className="flex-1">
               <SearchBar defaultValue={q} variant="compact" />
             </div>
-            <SearchFiltersToggle query={q} showFilters={showFilters} />
+            <SearchFiltersToggle query={q} showFilters={showFilters} view={view} />
           </div>
         </div>
       </div>
@@ -121,6 +122,8 @@ export default async function PropertiesPage({
                   Try adjusting your search or filters to find more results.
                 </p>
               </div>
+            ) : view === "map" ? (
+              <PropertyMap properties={properties} />
             ) : (
               <div className="space-y-5">
                 {properties.map((property) => (
