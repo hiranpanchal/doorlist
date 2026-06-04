@@ -52,6 +52,7 @@ export async function PUT(
       price: body.price ? parseInt(body.price) : property.price,
       bedrooms: body.bedrooms !== undefined ? parseInt(body.bedrooms) : property.bedrooms,
       bathrooms: body.bathrooms !== undefined ? parseInt(body.bathrooms) : property.bathrooms,
+      images: body.images !== undefined ? body.images : property.images,
       furnished: body.furnished ?? property.furnished,
       petFriendly: body.petFriendly ?? property.petFriendly,
       dssAccepted: body.dssAccepted ?? property.dssAccepted,

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import PropertyImageUploader from "@/components/PropertyImageUploader";
 
 export default function EditPropertyPage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function EditPropertyPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
   const [form, setForm] = useState({
     title: "", description: "", propertyType: "", address: "", city: "",
     county: "", postcode: "", price: "", bedrooms: "", bathrooms: "",
@@ -52,6 +54,9 @@ export default function EditPropertyPage() {
             smokersAllowed: data.smokersAllowed || false,
             billsIncluded: data.billsIncluded || false,
           });
+          if (data.images) {
+            setImages(data.images.split(",").filter(Boolean));
+          }
         }
         setLoading(false);
       });
@@ -70,6 +75,7 @@ export default function EditPropertyPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...form,
+        images: images.join(","),
         price: parseInt(form.price) || 0,
         bedrooms: parseInt(form.bedrooms) || 0,
         bathrooms: parseInt(form.bathrooms) || 1,
@@ -192,6 +198,14 @@ export default function EditPropertyPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Photos */}
+        <div className="bg-white rounded-2xl border border-border p-6">
+          <h2 className="text-base font-bold text-ink mb-4" style={{ fontFamily: "var(--font-bricolage), sans-serif" }}>
+            Property Photos
+          </h2>
+          <PropertyImageUploader images={images} onChange={setImages} />
         </div>
 
         {/* Address */}
