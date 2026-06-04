@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircle, Upload, Eye } from "lucide-react";
+import { CheckCircle, Eye } from "lucide-react";
+import ImageDropzone from "@/components/ImageDropzone";
 
 export default function AdminContentPage() {
   const [content, setContent] = useState<Record<string, string>>({});
@@ -172,19 +173,12 @@ export default function AdminContentPage() {
           </h2>
           <div className="space-y-4">
             <div>
-              <label className={labelClass}>
-                <Upload className="w-4 h-4 inline mr-1.5" />
-                Background Image URL
-              </label>
-              <input
+              <label className={labelClass}>Background Image</label>
+              <ImageDropzone
                 value={content.hero_image || ""}
-                onChange={(e) => update("hero_image", e.target.value)}
-                className={inputClass}
-                placeholder="https://images.unsplash.com/photo-... (leave empty for solid gradient)"
+                settingKey="hero_image"
+                onUploaded={(url) => update("hero_image", url)}
               />
-              <p className="text-xs text-muted mt-1">
-                Use any image URL. The image appears behind the colored overlay.
-              </p>
             </div>
 
             <div>
