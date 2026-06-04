@@ -84,14 +84,14 @@ export default function StaticPage({ page }: { page: PageData }) {
 
         /* Key takeaways box */
         .prose-doorlist .key-takeaways {
-          background: var(--color-surface);
-          border: 1px solid var(--color-border);
+          background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 60%, #c3e6ec 100%);
+          border: 3px solid #a8d8e8;
           border-radius: 20px;
-          padding: 32px 36px;
+          padding: 36px 40px;
           margin: 40px 0;
         }
         .prose-doorlist .key-takeaways h2 { margin-top: 0; font-size: 22px; }
-        .prose-doorlist .key-takeaways li { margin-bottom: 12px; line-height: 1.6; }
+        .prose-doorlist .key-takeaways li { margin-bottom: 14px; line-height: 1.6; }
 
         /* Two column layout */
         .prose-doorlist .two-col {
