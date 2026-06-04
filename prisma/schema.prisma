@@ -93,6 +93,18 @@ model Setting {
   value String
 }
 
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   @default("Tenant")
+  rating    Int      @default(5)
+  title     String   @default("")
+  body      String
+  published Boolean  @default(false)
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 model Page {
   id             String   @id
   title          String
