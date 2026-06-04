@@ -49,7 +49,7 @@ export default async function AdminListingsPage() {
                   <td className="px-5 py-3 text-muted">&pound;{p.price.toLocaleString()}</td>
                   <td className="px-5 py-3 text-center text-muted">{p.views}</td>
                   <td className="px-5 py-3">
-                    <AdminActions propertyId={p.id} featured={p.featured} />
+                    <AdminActions propertyId={p.id} featured={p.featured} status={p.status} />
                   </td>
                 </tr>
               ))}

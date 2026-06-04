@@ -18,12 +18,33 @@ export async function PATCH(
   const { id } = await params;
   const body = await request.json();
 
-  const property = await prisma.property.update({
-    where: { id },
-    data: { featured: body.featured },
-  });
+  // Activate listing for free (admin override)
+  if (body.activate) {
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setDate(expiresAt.getDate() + 30);
 
-  return NextResponse.json(property);
+    const property = await prisma.property.update({
+      where: { id },
+      data: {
+        status: "active",
+        paidAt: now,
+        expiresAt,
+      },
+    });
+    return NextResponse.json(property);
+  }
+
+  // Toggle featured
+  if (body.featured !== undefined) {
+    const property = await prisma.property.update({
+      where: { id },
+      data: { featured: body.featured },
+    });
+    return NextResponse.json(property);
+  }
+
+  return NextResponse.json({ error: "No action specified" }, { status: 400 });
 }
 
 export async function DELETE(
@@ -36,6 +57,7 @@ export async function DELETE(
 
   const { id } = await params;
   await prisma.payment.deleteMany({ where: { propertyId: id } });
+  await prisma.message.deleteMany({ where: { propertyId: id } });
   await prisma.property.delete({ where: { id } });
 
   return NextResponse.json({ success: true });
