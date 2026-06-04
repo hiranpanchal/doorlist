@@ -9,7 +9,7 @@ import { Menu, X, PlusCircle, LayoutDashboard, LogOut, Shield, User } from "luci
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: session, status } = useSession();
-  const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  const isAdmin = (session?.user as { role?: string })?.role === "admin";
 
   return (
     <header className="bg-white border-b border-border sticky top-0 z-50">
@@ -37,29 +37,32 @@ export default function Header() {
               <div className="w-20 h-9 bg-gray-100 rounded-lg animate-pulse" />
             ) : session?.user ? (
               <>
-                <Link
-                  href="/dashboard"
-                  className="text-sm font-medium text-gray-600 hover:text-primary transition-colors flex items-center gap-1.5"
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  Dashboard
-                </Link>
-                {isAdmin && (
+                {isAdmin ? (
                   <Link
                     href="/admin"
                     className="text-sm font-medium text-gray-600 hover:text-primary transition-colors flex items-center gap-1.5"
                   >
                     <Shield className="w-4 h-4" />
-                    Admin
+                    Admin Panel
                   </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="text-sm font-medium text-gray-600 hover:text-primary transition-colors flex items-center gap-1.5"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </Link>
+                    <Link
+                      href="/list-property"
+                      className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                    >
+                      <PlusCircle className="w-4 h-4" />
+                      Add Listing
+                    </Link>
+                  </>
                 )}
-                <Link
-                  href="/list-property"
-                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
-                >
-                  <PlusCircle className="w-4 h-4" />
-                  Add Listing
-                </Link>
                 <div className="flex items-center gap-3 pl-2 border-l border-border">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
@@ -115,18 +118,21 @@ export default function Header() {
             </Link>
             {session?.user ? (
               <>
-                <Link href="/dashboard" className="block text-sm font-medium text-gray-600 hover:text-primary py-2" onClick={() => setMobileOpen(false)}>
-                  Dashboard
-                </Link>
-                {isAdmin && (
+                {isAdmin ? (
                   <Link href="/admin" className="block text-sm font-medium text-gray-600 hover:text-primary py-2" onClick={() => setMobileOpen(false)}>
-                    Admin
+                    Admin Panel
                   </Link>
+                ) : (
+                  <>
+                    <Link href="/dashboard" className="block text-sm font-medium text-gray-600 hover:text-primary py-2" onClick={() => setMobileOpen(false)}>
+                      Dashboard
+                    </Link>
+                    <Link href="/list-property" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors" onClick={() => setMobileOpen(false)}>
+                      <PlusCircle className="w-4 h-4" />
+                      Add Listing
+                    </Link>
+                  </>
                 )}
-                <Link href="/list-property" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors" onClick={() => setMobileOpen(false)}>
-                  <PlusCircle className="w-4 h-4" />
-                  Add Listing
-                </Link>
                 <button
                   onClick={() => { signOut({ callbackUrl: "/" }); setMobileOpen(false); }}
                   className="block text-sm font-medium text-red-600 py-2"

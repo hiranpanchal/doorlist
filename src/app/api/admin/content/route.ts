@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 async function isAdmin() {
   const session = await auth();
-  return session?.user?.email === process.env.ADMIN_EMAIL;
+  return (session?.user as { role?: string })?.role === "admin";
 }
 
 // All homepage content keys with defaults
