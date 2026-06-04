@@ -4,10 +4,17 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check for NextAuth session token cookie
-  const token =
-    request.cookies.get("authjs.session-token")?.value ||
-    request.cookies.get("__Secure-authjs.session-token")?.value;
+  // Check all possible NextAuth/Auth.js session cookie names
+  const cookieNames = [
+    "authjs.session-token",
+    "__Secure-authjs.session-token",
+    "next-auth.session-token",
+    "__Secure-next-auth.session-token",
+  ];
+
+  const hasSession = cookieNames.some(
+    (name) => request.cookies.get(name)?.value
+  );
 
   const isProtected =
     pathname.startsWith("/dashboard") ||
@@ -16,7 +23,7 @@ export function middleware(request: NextRequest) {
 
   const isAdmin = pathname.startsWith("/admin");
 
-  if ((isProtected || isAdmin) && !token) {
+  if ((isProtected || isAdmin) && !hasSession) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
