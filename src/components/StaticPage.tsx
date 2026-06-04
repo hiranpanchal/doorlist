@@ -49,7 +49,7 @@ export default function StaticPage({ page }: { page: PageData }) {
 
       {/* Body */}
       <section className="py-16 lg:py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className="prose-doorlist"
             dangerouslySetInnerHTML={{ __html: page.body }}
@@ -80,6 +80,89 @@ export default function StaticPage({ page }: { page: PageData }) {
         .prose-doorlist strong { color: var(--color-ink); font-weight: 600; }
         .prose-doorlist em { font-style: italic; color: var(--color-muted); }
         .prose-doorlist blockquote { border-left: 3px solid var(--color-accent); padding-left: 20px; color: var(--color-muted); font-style: italic; margin: 20px 0; }
+        .prose-doorlist img { width: 100%; border-radius: 16px; object-fit: cover; max-height: 400px; }
+
+        /* Key takeaways box */
+        .prose-doorlist .key-takeaways {
+          background: var(--color-surface);
+          border: 1px solid var(--color-border);
+          border-radius: 20px;
+          padding: 32px 36px;
+          margin: 40px 0;
+        }
+        .prose-doorlist .key-takeaways h2 { margin-top: 0; font-size: 22px; }
+        .prose-doorlist .key-takeaways li { margin-bottom: 12px; line-height: 1.6; }
+
+        /* Two column layout */
+        .prose-doorlist .two-col {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 48px;
+          align-items: center;
+          margin: 48px 0;
+        }
+        .prose-doorlist .two-col.reverse { direction: rtl; }
+        .prose-doorlist .two-col.reverse > * { direction: ltr; }
+        .prose-doorlist .two-col .col h2 { margin-top: 0; }
+        .prose-doorlist .two-col .col img { height: 100%; min-height: 280px; }
+        @media (max-width: 768px) {
+          .prose-doorlist .two-col { grid-template-columns: 1fr; gap: 24px; }
+          .prose-doorlist .two-col.reverse { direction: ltr; }
+        }
+
+        /* Highlight box */
+        .prose-doorlist .highlight-box {
+          background: linear-gradient(135deg, #06182b 0%, #0e3558 100%);
+          color: white;
+          border-radius: 20px;
+          padding: 40px;
+          margin: 48px 0;
+        }
+        .prose-doorlist .highlight-box h2 { color: white; margin-top: 0; }
+        .prose-doorlist .highlight-box h3 { color: white; font-size: 17px; margin-top: 0; }
+        .prose-doorlist .highlight-box p { color: rgba(255,255,255,0.75); }
+        .prose-doorlist .highlight-box .grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+          margin-top: 24px;
+        }
+        .prose-doorlist .highlight-box .grid-item {
+          background: rgba(255,255,255,0.08);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 14px;
+          padding: 24px;
+        }
+        @media (max-width: 768px) {
+          .prose-doorlist .highlight-box .grid-2 { grid-template-columns: 1fr; }
+          .prose-doorlist .highlight-box { padding: 28px; }
+        }
+
+        /* CTA box */
+        .prose-doorlist .cta-box {
+          background: var(--color-surface-2);
+          border-radius: 20px;
+          padding: 40px;
+          margin: 48px 0;
+          text-align: center;
+        }
+        .prose-doorlist .cta-box h2 { margin-top: 0; }
+        .prose-doorlist .cta-box p { max-width: 520px; margin-left: auto; margin-right: auto; }
+        .prose-doorlist .cta-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 32px;
+          background: var(--color-ink);
+          color: white !important;
+          border-radius: 14px;
+          font-weight: 600;
+          font-size: 15px;
+          text-decoration: none !important;
+          margin-top: 8px;
+          transition: opacity 0.15s;
+        }
+        .prose-doorlist .cta-button:hover { opacity: 0.9; }
       `}</style>
     </>
   );
