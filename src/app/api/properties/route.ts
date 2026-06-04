@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       availableFrom: body.availableFrom,
       latitude: body.latitude ? parseFloat(body.latitude) : null,
       longitude: body.longitude ? parseFloat(body.longitude) : null,
-      images: "",
+      images: body.images || "",
       landlordName: user.name,
       landlordEmail: user.email,
       landlordPhone: user.phone,

@@ -57,13 +57,17 @@ export default function PropertyRowCard({ property }: { property: Property }) {
         style={{ display: "grid", gridTemplateColumns: "320px 1fr" }}
       >
         {/* Image */}
-        <div className="relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center min-h-[230px]">
-          <div className="text-center">
-            <Home className="w-10 h-10 text-ink/20 mx-auto mb-1" />
-            <span className="text-[11px] text-ink/30 uppercase tracking-wider">
-              Property Photo
-            </span>
-          </div>
+        <div className="relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center min-h-[230px] overflow-hidden">
+          {property.images && property.images.split(",")[0] ? (
+            <img src={property.images.split(",")[0]} alt={property.title} className="w-full h-full object-cover" />
+          ) : (
+            <div className="text-center">
+              <Home className="w-10 h-10 text-ink/20 mx-auto mb-1" />
+              <span className="text-[11px] text-ink/30 uppercase tracking-wider">
+                Property Photo
+              </span>
+            </div>
+          )}
           <div className="absolute top-3 left-3 flex gap-1.5">
             {property.featured && (
               <span className="bg-accent text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg">

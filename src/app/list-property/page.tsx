@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Home, CheckCircle } from "lucide-react";
+import PropertyImageUploader from "@/components/PropertyImageUploader";
 
 export default function ListPropertyPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,7 +40,7 @@ export default function ListPropertyPage() {
       const res = await fetch("/api/properties", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, images: images.join(",") }),
       });
 
       if (res.ok) {
@@ -173,6 +175,14 @@ export default function ListPropertyPage() {
                 </div>
               </div>
             </div>
+          </fieldset>
+
+          {/* Photos */}
+          <fieldset>
+            <legend className="text-lg font-semibold text-gray-900 mb-4">
+              Property Photos
+            </legend>
+            <PropertyImageUploader images={images} onChange={setImages} />
           </fieldset>
 
           {/* Address */}

@@ -53,13 +53,17 @@ export default function PropertyCard({ property }: { property: Property }) {
     <Link href={`/properties/${property.id}`} className="block">
       <div className="bg-white rounded-2xl border border-border overflow-hidden card-hover">
         {/* Image area */}
-        <div className="relative h-[210px] bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center">
-          <div className="text-center">
-            <Home className="w-10 h-10 text-ink/20 mx-auto mb-1" />
-            <span className="text-[11px] text-ink/30 uppercase tracking-wider">
-              Property Photo
-            </span>
-          </div>
+        <div className="relative h-[210px] bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center overflow-hidden">
+          {property.images && property.images.split(",")[0] ? (
+            <img src={property.images.split(",")[0]} alt={property.title} className="w-full h-full object-cover" />
+          ) : (
+            <div className="text-center">
+              <Home className="w-10 h-10 text-ink/20 mx-auto mb-1" />
+              <span className="text-[11px] text-ink/30 uppercase tracking-wider">
+                Property Photo
+              </span>
+            </div>
+          )}
           {/* Badges */}
           <div className="absolute top-3 left-3 flex gap-1.5">
             {property.featured && (

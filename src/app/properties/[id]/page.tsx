@@ -77,33 +77,47 @@ export default async function PropertyDetailPage({
         </div>
 
         {/* Photo Gallery Grid */}
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden mb-8 h-[420px]">
-          <div className="col-span-2 row-span-2 relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center">
-            <div className="text-center">
-              <Home className="w-14 h-14 text-ink/15 mx-auto mb-2" />
-              <span className="text-xs text-ink/30 uppercase tracking-wider">Main Photo</span>
-            </div>
-            <div className="absolute top-3 left-3 bg-ink/60 backdrop-blur text-white text-xs font-medium px-2.5 py-1 rounded-lg flex items-center gap-1.5">
-              <Camera className="w-3.5 h-3.5" /> 1 / {property.images ? property.images.split(",").length : 1}
-            </div>
-          </div>
-          {[2, 3, 4, 5].map((n) => (
-            <div
-              key={n}
-              className="relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center"
-            >
-              <Home className="w-8 h-8 text-ink/10" />
-              {n === 5 && (
-                <div className="absolute inset-0 bg-ink/40 flex flex-col items-center justify-center text-white">
-                  <Camera className="w-5 h-5 mb-1" />
-                  <span className="text-xs font-semibold uppercase tracking-wider">
-                    View all photos
-                  </span>
+        {(() => {
+          const imgs = property.images ? property.images.split(",").filter(Boolean) : [];
+          const slots = [0, 1, 2, 3, 4];
+          return (
+            <div className="grid grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden mb-8 h-[420px]">
+              {/* Main image */}
+              <div className="col-span-2 row-span-2 relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center overflow-hidden">
+                {imgs[0] ? (
+                  <img src={imgs[0]} alt={property.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="text-center">
+                    <Home className="w-14 h-14 text-ink/15 mx-auto mb-2" />
+                    <span className="text-xs text-ink/30 uppercase tracking-wider">Main Photo</span>
+                  </div>
+                )}
+                <div className="absolute top-3 left-3 bg-ink/60 backdrop-blur text-white text-xs font-medium px-2.5 py-1 rounded-lg flex items-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5" /> 1 / {Math.max(imgs.length, 1)}
                 </div>
-              )}
+              </div>
+              {/* Thumbnails */}
+              {slots.slice(1).map((n) => (
+                <div
+                  key={n}
+                  className="relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center overflow-hidden"
+                >
+                  {imgs[n] ? (
+                    <img src={imgs[n]} alt={`Photo ${n + 1}`} className="w-full h-full object-cover" />
+                  ) : (
+                    <Home className="w-8 h-8 text-ink/10" />
+                  )}
+                  {n === 4 && imgs.length > 5 && (
+                    <div className="absolute inset-0 bg-ink/50 flex flex-col items-center justify-center text-white">
+                      <Camera className="w-5 h-5 mb-1" />
+                      <span className="text-xs font-semibold">+{imgs.length - 5} more</span>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          );
+        })()}
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
