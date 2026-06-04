@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Upload, X, Image as ImageIcon, Loader2, GripVertical } from "lucide-react";
+import { X, Image as ImageIcon, Loader2 } from "lucide-react";
+
+const CLOUD_NAME = "dprl8j64h";
+const UPLOAD_PRESET = "doorlist_unsigned";
 
 export default function PropertyImageUploader({
   images,
@@ -10,46 +13,46 @@ export default function PropertyImageUploader({
   images: string[];
   onChange: (images: string[]) => void;
 }) {
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(0);
   const [error, setError] = useState("");
   const [draggingOver, setDraggingOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const uploadFile = useCallback(
-    async (file: File) => {
-      if (!file.type.startsWith("image/")) return;
-      if (file.size > 5 * 1024 * 1024) {
-        setError("Image must be under 5MB");
-        return;
+    async (file: File): Promise<string | null> => {
+      if (!file.type.startsWith("image/")) return null;
+      if (file.size > 10 * 1024 * 1024) {
+        setError("Image must be under 10MB");
+        return null;
       }
-
-      setUploading(true);
-      setError("");
 
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("upload_preset", UPLOAD_PRESET);
 
-      try {
-        const res = await fetch("/api/upload", { method: "POST", body: formData });
-        const data = await res.json();
-        if (data.url) {
-          onChange([...images, data.url]);
-        } else {
-          setError(data.error || "Upload failed");
-        }
-      } catch {
-        setError("Upload failed");
-      } finally {
-        setUploading(false);
-      }
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+      return data.secure_url || null;
     },
-    [images, onChange]
+    []
   );
 
   async function handleFiles(files: FileList) {
-    for (let i = 0; i < Math.min(files.length, 10 - images.length); i++) {
-      await uploadFile(files[i]);
-    }
+    const remaining = 10 - images.length;
+    const batch = Array.from(files).slice(0, remaining);
+    if (batch.length === 0) return;
+
+    setError("");
+    setUploading(batch.length);
+
+    const results = await Promise.all(batch.map(uploadFile));
+    const urls = results.filter(Boolean) as string[];
+
+    onChange([...images, ...urls]);
+    setUploading(0);
   }
 
   function handleDrop(e: React.DragEvent) {
@@ -72,7 +75,6 @@ export default function PropertyImageUploader({
 
   return (
     <div className="space-y-3">
-      {/* Image grid */}
       {images.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {images.map((url, i) => (
@@ -80,44 +82,20 @@ export default function PropertyImageUploader({
               key={i}
               className="relative group rounded-xl overflow-hidden border border-border aspect-[4/3] bg-surface"
             >
-              <img
-                src={url}
-                alt={`Property image ${i + 1}`}
-                className="w-full h-full object-cover"
-              />
-              {/* Overlay */}
+              <img src={url} alt={`Property image ${i + 1}`} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                 {i > 0 && (
-                  <button
-                    onClick={() => moveImage(i, i - 1)}
-                    className="p-1.5 rounded-lg bg-white/90 text-ink text-xs font-medium hover:bg-white"
-                    title="Move left"
-                  >
-                    ←
-                  </button>
+                  <button onClick={() => moveImage(i, i - 1)} className="p-1.5 rounded-lg bg-white/90 text-ink text-xs font-medium hover:bg-white" title="Move left">←</button>
                 )}
-                <button
-                  onClick={() => removeImage(i)}
-                  className="p-1.5 rounded-lg bg-red-500 text-white hover:bg-red-600"
-                  title="Remove"
-                >
+                <button onClick={() => removeImage(i)} className="p-1.5 rounded-lg bg-red-500 text-white hover:bg-red-600" title="Remove">
                   <X className="w-4 h-4" />
                 </button>
                 {i < images.length - 1 && (
-                  <button
-                    onClick={() => moveImage(i, i + 1)}
-                    className="p-1.5 rounded-lg bg-white/90 text-ink text-xs font-medium hover:bg-white"
-                    title="Move right"
-                  >
-                    →
-                  </button>
+                  <button onClick={() => moveImage(i, i + 1)} className="p-1.5 rounded-lg bg-white/90 text-ink text-xs font-medium hover:bg-white" title="Move right">→</button>
                 )}
               </div>
-              {/* Badge */}
               {i === 0 && (
-                <span className="absolute top-2 left-2 bg-ink/70 text-white text-[10px] font-semibold px-2 py-0.5 rounded-md backdrop-blur">
-                  Main photo
-                </span>
+                <span className="absolute top-2 left-2 bg-ink/70 text-white text-[10px] font-semibold px-2 py-0.5 rounded-md backdrop-blur">Main photo</span>
               )}
               <span className="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded backdrop-blur">
                 {i + 1}/{images.length}
@@ -127,7 +105,6 @@ export default function PropertyImageUploader({
         </div>
       )}
 
-      {/* Drop zone */}
       {images.length < 10 && (
         <div
           onDrop={handleDrop}
@@ -135,15 +112,13 @@ export default function PropertyImageUploader({
           onDragLeave={() => setDraggingOver(false)}
           onClick={() => inputRef.current?.click()}
           className={`flex flex-col items-center justify-center gap-3 p-8 rounded-2xl border-2 border-dashed cursor-pointer transition-colors ${
-            draggingOver
-              ? "border-accent bg-accent/5"
-              : "border-border hover:border-border-2 hover:bg-surface"
+            draggingOver ? "border-accent bg-accent/5" : "border-border hover:border-border-2 hover:bg-surface"
           }`}
         >
-          {uploading ? (
+          {uploading > 0 ? (
             <>
               <Loader2 className="w-8 h-8 text-accent animate-spin" />
-              <span className="text-sm text-muted">Uploading...</span>
+              <span className="text-sm text-muted">Uploading {uploading} image{uploading > 1 ? "s" : ""}...</span>
             </>
           ) : (
             <>
@@ -155,7 +130,7 @@ export default function PropertyImageUploader({
                   Drop images here, or <span className="text-accent">browse</span>
                 </p>
                 <p className="text-xs text-muted mt-1">
-                  JPG, PNG, or WebP · Max 5MB each · Up to {10 - images.length} more
+                  JPG, PNG, or WebP · Max 10MB · Up to {10 - images.length} more
                 </p>
               </div>
             </>
