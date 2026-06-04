@@ -66,15 +66,17 @@ export async function PUT(request: NextRequest) {
 
   const body = await request.json();
 
-  for (const [key, value] of Object.entries(body)) {
-    if (key in CONTENT_DEFAULTS) {
-      await prisma.setting.upsert({
+  const ops = Object.entries(body)
+    .filter(([key]) => key in CONTENT_DEFAULTS)
+    .map(([key, value]) =>
+      prisma.setting.upsert({
         where: { key },
         update: { value: value as string },
         create: { id: key, key, value: value as string },
-      });
-    }
-  }
+      })
+    );
+
+  await prisma.$transaction(ops);
 
   return NextResponse.json({ success: true });
 }
