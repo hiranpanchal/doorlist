@@ -81,7 +81,7 @@ export default async function PropertyDetailPage({
           const imgs = property.images ? property.images.split(",").filter(Boolean) : [];
           const slots = [0, 1, 2, 3, 4];
           return (
-            <div className="grid grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden mb-8 h-[420px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden mb-8 h-[280px] sm:h-[420px]">
               {/* Main image */}
               <div className="col-span-2 row-span-2 relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center overflow-hidden">
                 {imgs[0] ? (

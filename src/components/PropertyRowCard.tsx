@@ -53,11 +53,10 @@ export default function PropertyRowCard({ property }: { property: Property }) {
   return (
     <Link href={`/properties/${property.id}`} className="block group">
       <article
-        className="bg-white rounded-2xl border border-border overflow-hidden transition-all duration-150 hover:border-border-2 hover:shadow-[0_14px_34px_-22px_rgba(10,40,70,0.4)]"
-        style={{ display: "grid", gridTemplateColumns: "320px 1fr" }}
+        className="bg-white rounded-2xl border border-border overflow-hidden transition-all duration-150 hover:border-border-2 hover:shadow-[0_14px_34px_-22px_rgba(10,40,70,0.4)] grid grid-cols-1 sm:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr]"
       >
         {/* Image */}
-        <div className="relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center min-h-[230px] overflow-hidden">
+        <div className="relative bg-gradient-to-br from-surface-2 to-surface flex items-center justify-center h-[220px] sm:h-auto sm:min-h-[230px] overflow-hidden">
           {property.images && property.images.split(",")[0] ? (
             <img src={property.images.split(",")[0]} alt={property.title} className="w-full h-full object-cover" />
           ) : (
