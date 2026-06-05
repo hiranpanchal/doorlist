@@ -18,24 +18,43 @@ type Property = {
 };
 
 function createPriceIcon(price: number, selected: boolean) {
+  const bg = selected ? "#3b7dd8" : "#0e3a5c";
+  const scale = selected ? 1.1 : 1;
+  const shadow = selected
+    ? "0 4px 12px rgba(59,125,216,0.5)"
+    : "0 2px 6px rgba(0,0,0,0.25)";
+
   return L.divIcon({
     className: "",
     html: `<div style="
-      background: ${selected ? "var(--color-accent, #3b7dd8)" : "var(--color-ink, #0e3a5c)"};
-      color: white;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      border: 2px solid ${selected ? "white" : "transparent"};
-      transform: ${selected ? "scale(1.15)" : "scale(1)"};
-      transition: all 0.15s;
-      font-family: var(--font-hanken), sans-serif;
-    ">£${price.toLocaleString()}</div>`,
+      position: relative;
+      transform: scale(${scale}) translateY(${selected ? '-3px' : '0'});
+      transition: all 0.2s cubic-bezier(0.2,0,0,1);
+      filter: drop-shadow(${shadow.replace('box-shadow: ', '')});
+    ">
+      <div style="
+        background: ${bg};
+        color: white;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        letter-spacing: -0.01em;
+        line-height: 1;
+      ">£${price.toLocaleString()}</div>
+      <div style="
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid ${bg};
+        margin: 0 auto;
+      "></div>
+    </div>`,
     iconSize: [0, 0],
-    iconAnchor: [40, 20],
+    iconAnchor: [35, 38],
   });
 }
 
